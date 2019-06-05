@@ -1,6 +1,7 @@
 from urllib.parse import urlencode
 from tornado.options import options
 from tornado import httpclient
+from app.scraper.parser import parse_body
 
 
 def prepare_dates(**kwargs):
@@ -38,11 +39,11 @@ async def load_page(**kwargs):
 
     post_data = prepare_post_data(**kwargs)
     body = urlencode(post_data)
-    async with httpclient.AsyncHTTPClient() as client:
-        async with client.fetch(request=options.schedule_url,
-                                method='POST',
-                                headers=None,
-                                body=body) as response:
-            body = await response.body.decode('cp1251')
-            return body
+
+    response = await httpclient.AsyncHTTPClient().fetch(request=options.schedule_url,
+                                                        method='POST',
+                                                        headers=None,
+                                                        body=body)
+
+    return response.body.decode('cp1251')
 
