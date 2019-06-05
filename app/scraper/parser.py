@@ -54,19 +54,22 @@ def parse_fragments(fragments):
     return schedule
 
 
-def serialize_schedule(schedule):
-    schedule_json = json.dumps(schedule, ensure_ascii=False)
+def serialize_schedule(group, schedule):
+    to_serialize = {
+        'group': group,
+        'schedule': schedule
+    }
+    schedule_json = json.dumps(to_serialize, ensure_ascii=False)
     return schedule_json
 
 
-def parse_body(body):
+def parse_schedule(body):
     soup = BeautifulSoup(body, 'lxml')
 
     fragments_with_days = soup.find_all('div', class_='col-md-6')[1:]
     schedule = parse_fragments(fragments_with_days)
-    schedule_json = serialize_schedule(schedule)
 
-    return schedule_json
+    return schedule
 
 
 

@@ -1,7 +1,6 @@
 from urllib.parse import urlencode
 from tornado.options import options
 from tornado import httpclient
-from app.scraper.parser import parse_body
 
 
 def prepare_dates(**kwargs):
