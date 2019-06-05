@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-import json
 
 
 def parse_lesson_row(lesson):
@@ -54,15 +53,6 @@ def parse_fragments(fragments):
     return schedule
 
 
-def serialize_schedule(group, schedule):
-    to_serialize = {
-        'group': group,
-        'schedule': schedule
-    }
-    schedule_json = json.dumps(to_serialize, ensure_ascii=False)
-    return schedule_json
-
-
 def parse_schedule(body):
     soup = BeautifulSoup(body, 'lxml')
 
@@ -72,5 +62,20 @@ def parse_schedule(body):
     return schedule
 
 
+def parse_faculties(body):
+
+    soup = BeautifulSoup(body, 'lxml')
+    faculties = []
+
+    form_field = soup.find('select', id='faculty')
+    options = form_field.find_all('option')[1:]
+
+    for option in options:
+        faculties.append({
+            'name': option.text,
+            'code': int(option['value'])
+        })
+
+    return faculties
 
 
