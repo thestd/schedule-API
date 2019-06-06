@@ -10,5 +10,7 @@ def serialize_schedule(group, schedule):
     return schedule_json
 
 
-def serialize_faculties(faculties_list):
-    return json.dumps(faculties_list, ensure_ascii=False)
+def serialize_list(some_list):
+    return json.dumps(some_list, ensure_ascii=False)
+
+
