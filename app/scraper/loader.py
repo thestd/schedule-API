@@ -62,13 +62,13 @@ async def load_teachers_or_groups(teachers=True, query='', faculty='0'):
     }
 
     uri = options.ajax_url + urlencode(params)
-    print(uri)
+
     response = await httpclient.AsyncHTTPClient().fetch(request=uri,
                                                         headers=None,
                                                         method='GET')
 
     decoded_response = response.body.decode('cp1251')
-    print(decoded_response)
+
     # if not teachers:
     # can't loads to json with non-escaped escape character
     decoded_response = decoded_response.replace('\\', '\\\\')
