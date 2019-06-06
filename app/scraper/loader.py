@@ -50,18 +50,25 @@ async def load_page(**kwargs):
 
 async def load_teachers_or_groups(teachers=True, query='', faculty='0'):
     if teachers:
-        uri = options.teachers_ajax_url
+        api_code = options.teachers_api_code
     else:
-        uri = options.groups_ajax_url
+        api_code = options.groups_api_code
 
-    uri = uri.format(query, faculty)
-    # TODO: always returns full list or nothing: fix it
+    params = {
+        'n': 701,
+        'lev': api_code,
+        'faculty': faculty,
+        'query': query,
+    }
+
+    uri = options.ajax_url + urlencode(params)
+    print(uri)
     response = await httpclient.AsyncHTTPClient().fetch(request=uri,
                                                         headers=None,
                                                         method='GET')
 
     decoded_response = response.body.decode('cp1251')
-
+    print(decoded_response)
     # if not teachers:
     # can't loads to json with non-escaped escape character
     decoded_response = decoded_response.replace('\\', '\\\\')

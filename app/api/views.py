@@ -40,8 +40,7 @@ class TeachersApiView(RequestHandler):
     async def get(self):
         query = self.get_query_argument('query', '', False)
         faculty = self.get_query_argument('faculty', '0', False)
-        print(query)
-        print(faculty)
+
         teachers_list = await load_teachers_or_groups(query=query,
                                                       faculty=faculty)
 
@@ -54,6 +53,7 @@ class GroupsApiView(RequestHandler):
 
     async def get(self):
         query = self.get_query_argument('query',  '', False)
+
         groups_list = await load_teachers_or_groups(teachers=False,
                                                     query=query)
 
