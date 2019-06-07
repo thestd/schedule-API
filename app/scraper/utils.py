@@ -6,8 +6,8 @@ def prepare_dates(**kwargs):
     date_from = kwargs.get('date_from', None)
     date_to = kwargs.get('date_to', None)
 
-    date_from = (date_from.strftime('%d.%m.%Y').encode('cp1251')) if date_from else ''
-    date_to = (date_to.strftime('%d.%m.%Y').encode('cp1251')) if date_to else ''
+    date_from = (date_from.strftime('%d.%m.%Y').encode(options.base_encoding)) if date_from else ''
+    date_to = (date_to.strftime('%d.%m.%Y').encode(options.base_encoding)) if date_to else ''
 
     return date_from, date_to
 
