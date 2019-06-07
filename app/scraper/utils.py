@@ -7,7 +7,9 @@ def prepare_request(url=None, method='GET', body=None):
         url = options.schedule_url
     request = HTTPRequest(url=url,
                           method=method,
-                          body=body)
+                          body=body,
+                          connect_timeout=options.connection_timeout,
+                          request_timeout=options.request_timeout)
     return request
 
 

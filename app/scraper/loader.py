@@ -9,7 +9,6 @@ async def load_page(**kwargs):
 
     request = prepare_request(**kwargs)
     response = await AsyncHTTPClient().fetch(request=request)
-
     return response.body.decode(options.base_encoding)
 
 
