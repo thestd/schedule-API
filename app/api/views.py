@@ -5,21 +5,26 @@ from app.scraper.parser import (parse_schedule,
                                 parse_faculties)
 from app.scraper.serializers import (serialize_schedule,
                                      serialize_list)
-from datetime import date
 
 
 class SceduleApiView(RequestHandler):
 
     async def get(self):
-        group = self.get_query_argument('group', 'КН-2')
-        faculty = self.get_query_argument('group', '0')
+
+        group = self.get_query_argument('group')
+        faculty = self.get_query_argument('faculty', '0')
+        date_from = self.get_query_argument('date_from', '')
+        date_to = self.get_query_argument('date_to', '')
+        # TODO: date validation
+
         body = await load_page(group=group,
                                faculty=faculty,
-                               date_from=date(day=25, month=4, year=2019),
-                               date_to=date(day=2, month=5, year=2019)
+                               date_from=date_from,
+                               date_to=date_to
                                )
         schedule = parse_schedule(body)
-        schedule_json = serialize_schedule(group=group, schedule=schedule)
+        schedule_json = serialize_schedule(group=group,
+                                           schedule=schedule)
         self.set_status(200)
         self.write(schedule_json)
 
@@ -38,8 +43,10 @@ class FacultiesApiView(RequestHandler):
 class TeachersApiView(RequestHandler):
 
     async def get(self):
+
         query = self.get_query_argument('query', '', False)
         faculty = self.get_query_argument('faculty', '0', False)
+        # TODO: validate faculty
 
         teachers_list = await load_teachers_or_groups(query=query,
                                                       faculty=faculty)

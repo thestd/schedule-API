@@ -2,37 +2,7 @@ from urllib.parse import urlencode
 from tornado.options import options
 from tornado import httpclient
 from json import loads, JSONDecodeError
-
-
-def prepare_dates(**kwargs):
-
-    date_from = kwargs.get('date_from', None)
-    date_to = kwargs.get('date_to', None)
-
-    date_from = (date_from.strftime('%d.%m.%Y').encode('cp1251')) if date_from else ''
-    date_to = (date_to.strftime('%d.%m.%Y').encode('cp1251')) if date_to else ''
-
-    return date_from, date_to
-
-
-def prepare_post_data(**kwargs):
-
-    sdate, edate = prepare_dates(**kwargs)
-
-    group = kwargs.get('group', '')
-    faculty = kwargs.get('faculty', '')
-    teacher = kwargs.get('teacher', '')
-
-    post_data = {
-        'faculty': faculty.encode('cp1251'),
-        'teacher': teacher.encode('cp1251'),
-        'group': group.encode('cp1251'),
-        'sdate': sdate,
-        'edate': edate,
-        'n': 700
-    }
-
-    return post_data
+from app.scraper.utils import prepare_post_data
 
 
 async def load_page(**kwargs):
@@ -45,7 +15,7 @@ async def load_page(**kwargs):
                                                         headers=None,
                                                         body=body)
 
-    return response.body.decode('cp1251')
+    return response.body.decode(options.base_encoding)
 
 
 async def load_teachers_or_groups(teachers=True, query='', faculty='0'):
@@ -67,7 +37,7 @@ async def load_teachers_or_groups(teachers=True, query='', faculty='0'):
                                                         headers=None,
                                                         method='GET')
 
-    decoded_response = response.body.decode('cp1251')
+    decoded_response = response.body.decode(options.base_encoding)
 
     # if not teachers:
     # can't loads to json with non-escaped escape character

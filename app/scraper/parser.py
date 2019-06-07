@@ -18,13 +18,18 @@ def parse_raw_lesson(raw_lesson):
     return parsed_lesson
 
 
+def check_lesson_is_empty(parsed_lesson):
+    return parsed_lesson['info'] != " "
+
+
 def parse_raw_lessons(raw_lessons):
 
     parsed_lessons_list = []
 
     for raw_lesson in raw_lessons:
         parsed_lesson = parse_raw_lesson(raw_lesson)
-        parsed_lessons_list.append(parsed_lesson)
+        if check_lesson_is_empty(parsed_lesson):
+            parsed_lessons_list.append(parsed_lesson)
 
     return parsed_lessons_list
 

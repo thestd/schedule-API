@@ -12,3 +12,4 @@ def load_conf(config_file=None):
            help="Why n=701?")
     define("teachers_api_code", default="141", help="Why n is not 702?")
     define("groups_api_code", default="142", help="703")
+    define("base_encoding", default="cp1251", help="encoding")
