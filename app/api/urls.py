@@ -4,9 +4,9 @@ from app.api.handlers import (SceduleApiHandler,
                               GroupsApiHandler)
 
 urls = [
-    ("/api/schedule/", SceduleApiHandler),
-    ("/api/faculties/", FacultiesApiHandler),
-    ("/api/groups/", GroupsApiHandler),
-    ("/api/teachers/", TeachersApiHandler),
+    (r"/api/schedule/?", SceduleApiHandler),
+    (r"/api/faculties/?", FacultiesApiHandler),
+    (r"/api/groups/?", GroupsApiHandler),
+    (r"/api/teachers/?", TeachersApiHandler),
 ]
 
