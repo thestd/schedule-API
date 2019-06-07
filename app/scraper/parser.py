@@ -19,7 +19,7 @@ def parse_raw_lesson(raw_lesson):
 
 
 def check_lesson_is_empty(parsed_lesson):
-    return parsed_lesson['info'] == " "
+    return not parsed_lesson['info'].strip()
 
 
 def parse_raw_lessons(raw_lessons):

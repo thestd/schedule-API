@@ -1,24 +1,28 @@
 from urllib.parse import urlencode
 from tornado.options import options
-from tornado import httpclient
+from tornado.httpclient import AsyncHTTPClient
 from json import loads, JSONDecodeError
-from app.scraper.utils import prepare_post_data
+from app.scraper.utils import prepare_post_data, prepare_request
 
 
 async def load_page(**kwargs):
 
-    post_data = prepare_post_data(**kwargs)
-    body = urlencode(post_data)
-
-    response = await httpclient.AsyncHTTPClient().fetch(request=options.schedule_url,
-                                                        method='POST',
-                                                        headers=None,
-                                                        body=body)
+    request = prepare_request(**kwargs)
+    response = await AsyncHTTPClient().fetch(request=request)
 
     return response.body.decode(options.base_encoding)
 
 
-async def load_teachers_or_groups(teachers=True, query='', faculty='0'):
+async def load_schedule(**kwargs):
+
+    post_data = prepare_post_data(**kwargs)
+    body = urlencode(post_data)
+
+    return await load_page(method='POST', body=body)
+
+
+async def load_teachers_or_groups(query='', faculty='0', teachers=False):
+
     if teachers:
         api_code = options.teachers_api_code
     else:
@@ -31,13 +35,9 @@ async def load_teachers_or_groups(teachers=True, query='', faculty='0'):
         'query': query,
     }
 
-    uri = options.ajax_url + urlencode(params)
+    url = options.ajax_url + urlencode(params)
 
-    response = await httpclient.AsyncHTTPClient().fetch(request=uri,
-                                                        headers=None,
-                                                        method='GET')
-
-    decoded_response = response.body.decode(options.base_encoding)
+    decoded_response = await load_page(url=url)
 
     # if not teachers:
     # can't loads to json with non-escaped escape character

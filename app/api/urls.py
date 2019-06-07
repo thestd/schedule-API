@@ -1,12 +1,12 @@
-from app.api.views import (SceduleApiView,
-                           FacultiesApiView,
-                           TeachersApiView,
-                           GroupsApiView)
+from app.api.handlers import (SceduleApiHandler,
+                              FacultiesApiHandler,
+                              TeachersApiHandler,
+                              GroupsApiHandler)
 
 urls = [
-    ("/api/schedule/", SceduleApiView),
-    ("/api/faculties/", FacultiesApiView),
-    ("/api/groups/", GroupsApiView),
-    ("/api/teachers/", TeachersApiView),
+    ("/api/schedule/", SceduleApiHandler),
+    ("/api/faculties/", FacultiesApiHandler),
+    ("/api/groups/", GroupsApiHandler),
+    ("/api/teachers/", TeachersApiHandler),
 ]
 

@@ -1,4 +1,14 @@
 from tornado.options import options
+from tornado.httpclient import HTTPRequest
+
+
+def prepare_request(url=None, method='GET', body=None):
+    if not url:
+        url = options.schedule_url
+    request = HTTPRequest(url=url,
+                          method=method,
+                          body=body)
+    return request
 
 
 def prepare_dates(**kwargs):
