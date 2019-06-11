@@ -8,7 +8,15 @@ from app.scraper.serializers import (serialize_schedule,
                                      serialize_list)
 
 
-class SceduleApiHandler(RequestHandler):
+class BaseHandler(RequestHandler):
+
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header('Access-Control-Allow-Methods', 'GET')
+
+
+class SceduleApiHandler(BaseHandler):
 
     async def prepare(self):
 
@@ -35,7 +43,7 @@ class SceduleApiHandler(RequestHandler):
         self.write(schedule_json)
 
 
-class FacultiesApiHandler(RequestHandler):
+class FacultiesApiHandler(BaseHandler):
 
     async def get(self):
 
@@ -46,7 +54,7 @@ class FacultiesApiHandler(RequestHandler):
         self.write(faculties_json)
 
 
-class TeachersApiHandler(RequestHandler):
+class TeachersApiHandler(BaseHandler):
 
     async def prepare(self):
         query = self.get_query_argument('query', '', False)
@@ -67,7 +75,7 @@ class TeachersApiHandler(RequestHandler):
         self.write(teachers_json)
 
 
-class GroupsApiHandler(RequestHandler):
+class GroupsApiHandler(BaseHandler):
 
     async def get(self):
         query = self.get_query_argument('query',  '', False)
