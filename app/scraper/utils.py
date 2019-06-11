@@ -2,7 +2,11 @@ from tornado.options import options
 from tornado.httpclient import HTTPRequest
 
 
+__all__ = ["prepare_request", "prepare_post_data", ]
+
+
 def prepare_request(url=None, method='GET', body=None):
+    # Todo: provide docstring
     if not url:
         url = options.schedule_url
     request = HTTPRequest(url=url,
@@ -13,21 +17,8 @@ def prepare_request(url=None, method='GET', body=None):
     return request
 
 
-def prepare_dates(**kwargs):
-
-    date_from = kwargs.get('date_from', None)
-    date_to = kwargs.get('date_to', None)
-
-    date_from = (date_from.strftime('%d.%m.%Y').encode(options.base_encoding)) if date_from else ''
-    date_to = (date_to.strftime('%d.%m.%Y').encode(options.base_encoding)) if date_to else ''
-
-    return date_from, date_to
-
-
 def prepare_post_data(**kwargs):
-
-    # sdate, edate = prepare_dates(**kwargs)
-
+    # Todo: provide docstring
     group = kwargs.get('group', '')
     faculty = kwargs.get('faculty', '')
     teacher = kwargs.get('teacher', '')

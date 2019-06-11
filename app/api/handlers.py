@@ -1,15 +1,16 @@
 from tornado.web import RequestHandler
-from app.scraper.loader import (load_page,
-                                load_teachers_or_groups,
-                                load_schedule)
-from app.scraper.parser import (parse_schedule,
-                                parse_faculties)
-from app.scraper.serializers import (serialize_schedule,
-                                     serialize_list)
+
+from app.scraper.loader import load_page, load_teachers_or_groups, \
+    load_schedule
+from app.scraper.parser import parse_schedule, parse_faculties
+from app.scraper.serializers import serialize_schedule, serialize_list
+
+
+__all__ = ["ScheduleApiHandler", "FacultiesApiHandler", "TeachersApiHandler",
+           "GroupsApiHandler", ]
 
 
 class BaseHandler(RequestHandler):
-
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "*")
@@ -20,10 +21,8 @@ class BaseHandler(RequestHandler):
         self.finish()
 
 
-class SceduleApiHandler(BaseHandler):
-
+class ScheduleApiHandler(BaseHandler):
     async def prepare(self):
-
         group = self.get_query_argument('group')
         faculty = self.get_query_argument('faculty', '0')
         date_from = self.get_query_argument('date_from', '')
@@ -31,26 +30,23 @@ class SceduleApiHandler(BaseHandler):
 
         # TODO: date validation
 
-        self.params = dict(group=group,
-                           faculty=faculty,
-                           date_from=date_from,
-                           date_to=date_to
-                           )
+        self._params = dict(group=group,
+                            faculty=faculty,
+                            date_from=date_from,
+                            date_to=date_to
+                            )
 
     async def get(self):
-
-        body = await load_schedule(**self.params)
+        body = await load_schedule(**self._params)
         schedule = parse_schedule(body)
-        schedule_json = serialize_schedule(group=self.params['group'],
+        schedule_json = serialize_schedule(group=self._params['group'],
                                            schedule=schedule)
         self.set_status(200)
         self.write(schedule_json)
 
 
 class FacultiesApiHandler(BaseHandler):
-
     async def get(self):
-
         body = await load_page()
         faculties_list = parse_faculties(body)
         faculties_json = serialize_list(faculties_list)
@@ -59,20 +55,18 @@ class FacultiesApiHandler(BaseHandler):
 
 
 class TeachersApiHandler(BaseHandler):
-
     async def prepare(self):
         query = self.get_query_argument('query', '', False)
         faculty = self.get_query_argument('faculty', '0', False)
 
         # TODO: validate faculty
 
-        self.params = dict(query=query,
-                           faculty=faculty,
-                           teachers=True)
+        self._params = dict(query=query,
+                            faculty=faculty,
+                            teachers=True)
 
     async def get(self):
-
-        teachers_list = await load_teachers_or_groups(**self.params)
+        teachers_list = await load_teachers_or_groups(**self._params)
 
         teachers_json = serialize_list(teachers_list)
         self.set_status(200)
@@ -80,9 +74,8 @@ class TeachersApiHandler(BaseHandler):
 
 
 class GroupsApiHandler(BaseHandler):
-
     async def get(self):
-        query = self.get_query_argument('query',  '', False)
+        query = self.get_query_argument('query', '', False)
 
         groups_list = await load_teachers_or_groups(query=query)
 
