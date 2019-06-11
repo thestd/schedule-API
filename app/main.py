@@ -7,9 +7,13 @@ from app.options import load_conf
 
 
 def _make_app():
+    """
+    Defines main application `urls` & `settings`
+
+    :return Application:
+    """
     # Todo: provide docstring
-    urls = []
-    urls.extend(api_urls)
+    urls = [*api_urls]
 
     settings = {
         'handlers': urls,
@@ -19,7 +23,6 @@ def _make_app():
 
 
 if __name__ == '__main__':
-    _make_app()
     load_conf()
     app = _make_app()
     app.listen(options.app_port)
