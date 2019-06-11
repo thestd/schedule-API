@@ -15,6 +15,10 @@ class BaseHandler(RequestHandler):
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
         self.set_header('Access-Control-Allow-Methods', 'GET')
 
+    async def options(self):
+        self.set_status(204)
+        self.finish()
+
 
 class SceduleApiHandler(BaseHandler):
 
