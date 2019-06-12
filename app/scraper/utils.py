@@ -6,7 +6,16 @@ __all__ = ["prepare_request", "prepare_post_data", ]
 
 
 def prepare_request(url=None, method='GET', body=None):
-    # Todo: provide docstring
+    """
+    :param url: Url for the request. If not specified - take default from options
+    :type url: str
+    :param method: Request method. 'GET' by default
+    :type method: str
+    :param body: Request body. None in most cases.
+    :type body: str
+    :return object of HTTPRequestW
+    """
+
     if not url:
         url = options.schedule_url
     request = HTTPRequest(url=url,
@@ -18,7 +27,11 @@ def prepare_request(url=None, method='GET', body=None):
 
 
 def prepare_post_data(**kwargs):
-    # Todo: provide docstring
+    """
+    :param kwargs:
+    :return dict, prepared to use as body in POST request.
+    :rtype dict
+    """
     group = kwargs.get('group', '')
     faculty = kwargs.get('faculty', '')
     teacher = kwargs.get('teacher', '')
