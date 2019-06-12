@@ -13,9 +13,10 @@ __all__ = ["load_page", "load_schedule", "load_teachers_or_groups", ]
 async def load_page(**kwargs):
     """
     Pass **kwargs to prepare_request() and send taken request with AsyncHTTPClient
-    :param kwargs:
-    :return body of the HTTPClient.fetch() response
-    :rtype str
+
+    Returns:
+        body (str): body of the HTTPClient.fetch() response
+
     """
     request = prepare_request(**kwargs)
     response = await AsyncHTTPClient().fetch(request=request)
@@ -25,9 +26,11 @@ async def load_page(**kwargs):
 async def load_schedule(**kwargs):
     """
     Wrapper around load_page()
-    :param kwargs: pass **kwargs to prepare_post_data()
-    :return body of the HTTPClient.fetch() response
-    :rtype str
+    Pass **kwargs to prepare_post_data() to get body for POST request
+
+    Returns:
+        body (str): body of the HTTPClient.fetch() response
+
     """
     post_data = prepare_post_data(**kwargs)
     body = urlencode(post_data)
@@ -38,14 +41,15 @@ async def load_schedule(**kwargs):
 async def load_teachers_or_groups(query='', faculty='0', teachers=False):
     """
     Send request to schedule url to get teachers or groups list
-    :param query:
-    :type query: str
-    :param faculty: faculty code
-    :type faculty: int, str
-    :param teachers: False by default
-    :type teachers: bool
-    :return list of groups names if 'teachers' is False, else list of teachers names
-    :rtype list[str]
+
+    Args:
+        query (str):
+        faculty(int, str): faculty code
+        teachers(bool): False by default
+
+    Returns:
+        (list): list of groups names if 'teachers' is False, else list of teachers names
+
     """
     if teachers:
         api_code = options.teachers_api_code
