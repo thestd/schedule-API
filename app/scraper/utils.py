@@ -28,9 +28,6 @@ def prepare_request(url=None, method='GET', body=None):
 
 def prepare_post_data(**kwargs):
     """
-    Args:
-        kwargs
-
     Returns:
         dict: dict, prepared to use as body in POST request.
 
