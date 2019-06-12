@@ -15,7 +15,7 @@ async def load_page(**kwargs):
     Pass **kwargs to prepare_request() and send taken request with AsyncHTTPClient
 
     Returns:
-        body (str): body of the HTTPClient.fetch() response
+        str: body of the HTTPClient.fetch() response
 
     """
     request = prepare_request(**kwargs)
@@ -29,7 +29,7 @@ async def load_schedule(**kwargs):
     Pass **kwargs to prepare_post_data() to get body for POST request
 
     Returns:
-        body (str): body of the HTTPClient.fetch() response
+        str: body of the HTTPClient.fetch() response
 
     """
     post_data = prepare_post_data(**kwargs)
@@ -48,7 +48,7 @@ async def load_teachers_or_groups(query='', faculty='0', teachers=False):
         teachers(bool): False by default
 
     Returns:
-        (list): list of groups names if 'teachers' is False, else list of teachers names
+        list: list of groups names if 'teachers' is False, else list of teachers names
 
     """
     if teachers:

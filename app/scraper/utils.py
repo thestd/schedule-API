@@ -13,7 +13,7 @@ def prepare_request(url=None, method='GET', body=None):
         body (str): Request body. None in most cases.
 
     Returns:
-        request: object of HTTPRequest class
+        HTTPRequest: request object
     """
 
     if not url:
@@ -32,7 +32,7 @@ def prepare_post_data(**kwargs):
         kwargs
 
     Returns:
-        post_data (dict): dict, prepared to use as body in POST request.
+        dict: dict, prepared to use as body in POST request.
 
     """
     group = kwargs.get('group', '')
