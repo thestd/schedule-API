@@ -5,9 +5,9 @@ __all__ = ["load_conf", ]
 
 
 def load_conf(config_file=None):
-    # Todo: provide docstring
-    if config_file:
-        parse_config_file(config_file)
+    """
+    Defining of the project options
+    """
 
     define("app_port", default=8085, help="Application port")
     define("secret", default="ABCDEFG!@#$%#", help="Secret key")
@@ -21,3 +21,6 @@ def load_conf(config_file=None):
     define("base_encoding", default="cp1251", help="encoding")
     define("connection_timeout", default=1.5, help="connection timeout")
     define("request_timeout", default=1.5, help="request timeout")
+
+    if config_file:
+        parse_config_file(config_file)

@@ -8,11 +8,10 @@ from app.options import load_conf
 
 def _make_app():
     """
-    Defines main application `urls` & `settings`
+    Defines main application `handlers` & `settings`
 
     :return Application:
     """
-    # Todo: provide docstring
     urls = [*api_urls]
 
     settings = {

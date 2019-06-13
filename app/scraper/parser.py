@@ -5,7 +5,18 @@ __all__ = ["parse_schedule", "parse_faculties", ]
 
 
 def _parse_raw_lesson(raw_lesson):
-    # Todo: provide docstring
+    """
+
+    Args:
+        raw_lesson: 'BeautifulSoup' objects contains lesson info
+    Returns:
+        dict: info about lesson
+        {
+            'number': str,
+            'time_bounds': str,
+            'info': str
+        }
+    """
     info = raw_lesson.find_all('td')
     lesson_number = info[0].contents[0]
 
@@ -24,12 +35,28 @@ def _parse_raw_lesson(raw_lesson):
 
 
 def _check_lesson_is_empty(parsed_lesson):
-    # Todo: provide docstring
+    """
+    Checking lesson for being empty
+
+    Args:
+        parsed_lesson (dict): Parsed lesson
+
+    Return:
+        bool: True if parsed_lesson['info'] have any content except whitespaces, else False
+    """
     return not parsed_lesson['info'].strip()
 
 
 def _parse_raw_lessons(raw_lessons):
-    # Todo: provide docstring
+    """
+
+    Args:
+         raw_lessons (list): list of the 'BeautifulSoup'
+
+    Returns:
+        list[dict]: list of the parsed lessons
+
+    """
     parsed_lessons_list = []
     for raw_lesson in raw_lessons:
         parsed_lesson = _parse_raw_lesson(raw_lesson)
@@ -40,7 +67,16 @@ def _parse_raw_lessons(raw_lessons):
 
 
 def _parse_raw_day(fragment):
-    # Todo: provide docstring
+    """
+    Taking all the info we need from the object
+
+    Args:
+        fragment: 'BeautifulSoup' objects contains day info ('div' with class 'col-md-6')
+
+    Returns:
+        tuple: (str, str, list): Tuple contains date, day and list of the lessons
+
+    """
     header = fragment.find_next('h4').contents
     day_schedule = fragment.find_next('table')
     raw_lessons = day_schedule.find_all('tr')
@@ -53,7 +89,28 @@ def _parse_raw_day(fragment):
 
 
 def _parse_raw_days(raw_days_list):
-    # Todo: provide docstring
+    """
+
+    Args:
+        raw_days_list (list): list of the 'BeautifulSoup' objects ('div' with class 'col-md-6')
+
+    Returns:
+        list[dict]:
+
+
+        [
+          {
+            'date': str,
+            'day': str,
+            'items': [
+              {
+                'number': str,
+                'time_bounds': str,
+                'info': str
+              }
+        ]
+
+    """
     schedule = []
     for raw_day in raw_days_list:
         date, day, parsed_lessons_list = _parse_raw_day(raw_day)
@@ -69,7 +126,30 @@ def _parse_raw_days(raw_days_list):
 
 
 def parse_schedule(body):
-    # Todo: provide docstring
+    """
+    Find all html parts with day schedule and pass them to _parse_raw_days() function
+
+    Args:
+        body (str): Request response body
+
+    Returns:
+        list[dict]: list of dicts
+
+
+        [
+          {
+            'date': str,
+            'day': str,
+            'items': [
+              {
+                'number': str,
+                'time_bounds': str,
+                'info': str
+              }
+        ]
+
+
+    """
     soup = BeautifulSoup(body, 'lxml')
     raw_days_list = soup.find_all('div', class_='col-md-6')[1:]
     schedule = _parse_raw_days(raw_days_list)
@@ -78,7 +158,13 @@ def parse_schedule(body):
 
 
 def _parse_options_list(options):
-    # Todo: provide docstring
+    """
+    Args:
+        options: list of the BeautifulSoup objects
+
+    Returns:
+        list[dict]: list of parsed info about faculties
+    """
     faculties_list = []
     for option in options:
         faculties_list.append({
@@ -90,7 +176,13 @@ def _parse_options_list(options):
 
 
 def parse_faculties(body):
-    # Todo: provide docstring
+    """
+    Args:
+        body (str): Request response body
+
+    Returns:
+        list[dict]: list of the faculties codes and names
+    """
     soup = BeautifulSoup(body, 'lxml')
     form_field = soup.find('select', id='faculty')
     options = form_field.find_all('option')[1:]
