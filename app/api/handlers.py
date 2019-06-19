@@ -23,14 +23,16 @@ class BaseHandler(RequestHandler):
 
 class ScheduleApiHandler(BaseHandler):
     async def prepare(self):
-        group = self.get_query_argument('group')
+        query = self.get_query_argument('query')
+        q_type = self.get_query_argument('q_type', 'group')
         faculty = self.get_query_argument('faculty', '0')
         date_from = self.get_query_argument('date_from', '')
         date_to = self.get_query_argument('date_to', '')
 
         # TODO: date validation
 
-        self._params = dict(group=group,
+        self._params = dict(query=query,
+                            q_type=q_type,
                             faculty=faculty,
                             date_from=date_from,
                             date_to=date_to
@@ -39,7 +41,8 @@ class ScheduleApiHandler(BaseHandler):
     async def get(self):
         body = await load_schedule(**self._params)
         schedule = parse_schedule(body)
-        schedule_json = serialize_schedule(group=self._params['group'],
+        schedule_json = serialize_schedule(query=self._params['query'],
+                                           q_type=self._params['q_type'],
                                            schedule=schedule)
         self.set_status(200)
         self.write(schedule_json)

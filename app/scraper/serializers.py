@@ -4,10 +4,10 @@ import json
 __all__ = ["serialize_schedule", "serialize_list", ]
 
 
-def serialize_schedule(group, schedule):
+def serialize_schedule(query, q_type, schedule):
     # Todo: provide docstring
     to_serialize = {
-        'group': group,
+        q_type: query,
         'schedule': schedule
     }
     schedule_json = json.dumps(to_serialize, ensure_ascii=False)

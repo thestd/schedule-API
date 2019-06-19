@@ -32,16 +32,15 @@ def prepare_post_data(**kwargs):
         dict: dict, prepared to use as body in POST request.
 
     """
-    group = kwargs.get('group', '')
+    query = kwargs.get('query', '')
+    q_type = kwargs.get('q_type', '')
     faculty = kwargs.get('faculty', '')
-    teacher = kwargs.get('teacher', '')
     sdate = kwargs.get('date_from', '')
     edate = kwargs.get('date_to', '')
 
     post_data = {
         'faculty': faculty,
-        'teacher': teacher.encode(options.base_encoding),
-        'group': group.encode(options.base_encoding),
+        q_type: query.encode(options.base_encoding),
         'sdate': sdate.encode(options.base_encoding),
         'edate': edate.encode(options.base_encoding),
         'n': 700
