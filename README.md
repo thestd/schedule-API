@@ -49,8 +49,8 @@ A scrapper that works as a server with open api which parse the site of the
         ```
       - examples:
         - `yourdomain.com/api/schedule?query=ПІ-4&type=group`
-        - `yourdomain.com/api/schedule?query=ПІ-4&type=froup&date_from=
-           08.04.2019&date_to=09.04.2019`
+        - `yourdomain.com/api/schedule?query=Козленко МиколаІванович&q_type=teacher&date_from=07.05.2019`
+        - `yourdomain.com/api/schedule?query=ПІ-4&type=group&date_from=08.04.2019&date_to=09.04.2019`
       - response example:
         ```json
          {
