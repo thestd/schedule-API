@@ -1,4 +1,5 @@
 # Schedule-API
+[![Build Status](http://ci.pnu-bot.pp.ua/buildStatus/icon?job=schedule-API%2Fmaster&style=flat-square)](http://ci.pnu-bot.pp.ua/blue/organizations/jenkins/schedule-API/activity)
 
 A scrapper that works as a server with open api which parse the site of the
 [schedule](http://asu.pnu.edu.ua/)
