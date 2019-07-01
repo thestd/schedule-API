@@ -12,7 +12,7 @@ def _make_app(*args, **kwargs):
     """
 
     app = web.Application(debug=True)
-    app.add_routes(routes)
+    app.router.add_routes(routes)
     return app
 
 

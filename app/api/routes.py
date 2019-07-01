@@ -6,8 +6,8 @@ __all__ = ["routes", ]
 
 
 routes = [
-    get(r"/api/schedule/?", schedule_handler),
-    get(r"/api/faculties/?", faculties_handler),
-    get(r"/api/groups/?", groups_handler),
-    get(r"/api/teachers/?", teachers_handler),
+    get(r"/api/schedule", schedule_handler),
+    get(r"/api/faculties", faculties_handler),
+    get(r"/api/groups", groups_handler),
+    get(r"/api/teachers", teachers_handler),
 ]
