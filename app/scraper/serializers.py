@@ -5,7 +5,6 @@ __all__ = ["serialize_schedule", "serialize_list", ]
 
 
 def serialize_schedule(query, q_type, schedule):
-    # Todo: provide docstring
     to_serialize = {
         q_type: query,
         'schedule': schedule

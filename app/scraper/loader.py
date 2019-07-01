@@ -1,7 +1,7 @@
 from json import loads, JSONDecodeError
 
 from urllib.parse import urlencode
-from tornado.options import options
+from app import options
 from tornado.httpclient import AsyncHTTPClient
 
 from app.scraper.utils import prepare_post_data, prepare_request
@@ -20,7 +20,7 @@ async def load_page(**kwargs):
     """
     request = prepare_request(**kwargs)
     response = await AsyncHTTPClient().fetch(request=request)
-    return response.body.decode(options.base_encoding)
+    return response.body.decode(options.BASE_ENCODING)
 
 
 async def load_schedule(**kwargs):
@@ -52,9 +52,9 @@ async def load_teachers_or_groups(query='', faculty='0', teachers=False):
 
     """
     if teachers:
-        api_code = options.teachers_api_code
+        api_code = options.TEACHERS_API_CODE
     else:
-        api_code = options.groups_api_code
+        api_code = options.GROUPS_API_CODE
 
     params = {
         'n': 701,
@@ -63,7 +63,7 @@ async def load_teachers_or_groups(query='', faculty='0', teachers=False):
         'query': query,
     }
 
-    url = options.ajax_url + urlencode(params)
+    url = options.AJAX_URL + urlencode(params)
     decoded_response = await load_page(url=url)
 
     # if not teachers:
