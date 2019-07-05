@@ -22,7 +22,7 @@ async def schedule_handler(request):
                                faculty=faculty,
                                date_from=date_from,
                                date_to=date_to)
-    schedule = parse_schedule(body)
+    schedule = await parse_schedule(body)
     schedule_json = serialize_schedule(query=query,
                                        q_type=q_type,
                                        schedule=schedule)
@@ -32,7 +32,7 @@ async def schedule_handler(request):
 
 async def faculties_handler(request):
     body = await load_page()
-    faculties_list = parse_faculties(body)
+    faculties_list = await parse_faculties(body)
     faculties_json = serialize_list(faculties_list)
     return web.json_response(body=faculties_json, status=200)
 

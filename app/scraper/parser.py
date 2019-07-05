@@ -88,7 +88,7 @@ def _parse_raw_day(fragment):
     return date, day, parsed_lessons_list
 
 
-def _parse_raw_days(raw_days_list):
+async def _parse_raw_days(raw_days_list):
     """
 
     Args:
@@ -125,7 +125,7 @@ def _parse_raw_days(raw_days_list):
     return schedule
 
 
-def parse_schedule(body):
+async def parse_schedule(body):
     """
     Find all html parts with day schedule and pass them to _parse_raw_days() function
 
@@ -152,12 +152,12 @@ def parse_schedule(body):
     """
     soup = BeautifulSoup(body, 'lxml')
     raw_days_list = soup.find_all('div', class_='col-md-6')[1:]
-    schedule = _parse_raw_days(raw_days_list)
+    schedule = await _parse_raw_days(raw_days_list)
 
     return schedule
 
 
-def _parse_options_list(options):
+async def _parse_options_list(options):
     """
     Args:
         options: list of the BeautifulSoup objects
@@ -175,7 +175,7 @@ def _parse_options_list(options):
     return faculties_list
 
 
-def parse_faculties(body):
+async def parse_faculties(body):
     """
     Args:
         body (str): Request response body
@@ -186,7 +186,7 @@ def parse_faculties(body):
     soup = BeautifulSoup(body, 'lxml')
     form_field = soup.find('select', id='faculty')
     options = form_field.find_all('option')[1:]
-    faculties_list = _parse_options_list(options)
+    faculties_list = await _parse_options_list(options)
 
     return faculties_list
 
