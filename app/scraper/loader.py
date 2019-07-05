@@ -10,20 +10,20 @@ __all__ = ["load_page", "load_schedule", "load_teachers_or_groups", ]
 
 async def load_page(url=None, method='GET', body=None):
     """
-    Pass **kwargs to prepare_request() and send taken request with AsyncHTTPClient
+    Send request to the schedule url
 
     Returns:
-        str: body of the HTTPClient.fetch() response
+        str: decoded body of the response
 
     """
+    if not url:
+        url = options.SCHEDULE_URL
     async with aiohttp.ClientSession() as session:
-        if not url:
-            url = options.SCHEDULE_URL
         response = await session.request(url=url,
                                          method=method,
                                          data=body)
-
         raw_response_body = await response.content.read()
+
         return raw_response_body.decode(options.BASE_ENCODING)
 
 
@@ -33,7 +33,7 @@ async def load_schedule(**kwargs):
     Pass **kwargs to prepare_post_data() to get body for POST request
 
     Returns:
-        str: body of the HTTPClient.fetch() response
+        str: decoded body of the response
 
     """
     post_data = prepare_post_data(**kwargs)
