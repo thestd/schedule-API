@@ -8,12 +8,11 @@ from app.scraper.serializers import serialize_schedule, serialize_list
 
 async def schedule_handler(request):
 
-    group = request.rel_url.query.get('group', '')
-    teacher = request.rel_url.query.get('teacher', '')
-    faculty = request.rel_url.query.get('faculty', '0')
-    date_from = request.rel_url.query.get('date_from', '')
-    date_to = request.rel_url.query.get('date_to', '')
-
+    group = request.query.get('group', '')
+    teacher = request.query.get('teacher', '')
+    faculty = request.query.get('faculty', '0')
+    date_from = request.query.get('date_from', '')
+    date_to = request.query.get('date_to', '')
     # TODO: date validation
     query = group if group else teacher
     q_type = 'group' if group else 'teacher'
@@ -40,8 +39,8 @@ async def faculties_handler(request):
 
 async def teachers_handler(request):
 
-    query = request.rel_url.query.get('query', '')
-    faculty = request.rel_url.query.get('faculty', '0')
+    query = request.query.get('query', '')
+    faculty = request.query.get('faculty', '0')
 
     teachers_list = await load_teachers_or_groups(query=query,
                                                   faculty=faculty,
@@ -52,7 +51,7 @@ async def teachers_handler(request):
 
 
 async def groups_handler(request):
-    query = request.rel_url.query.get('query', '')
+    query = request.query.get('query', '')
 
     groups_list = await load_teachers_or_groups(query=query)
 

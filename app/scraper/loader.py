@@ -1,16 +1,14 @@
 from json import loads, JSONDecodeError
-
 from urllib.parse import urlencode
 from app import options
-from tornado.httpclient import AsyncHTTPClient
-
-from app.scraper.utils import prepare_post_data, prepare_request
+import aiohttp
+from app.scraper.utils import prepare_post_data
 
 
 __all__ = ["load_page", "load_schedule", "load_teachers_or_groups", ]
 
 
-async def load_page(**kwargs):
+async def load_page(url=None, method='GET', body=None):
     """
     Pass **kwargs to prepare_request() and send taken request with AsyncHTTPClient
 
@@ -18,9 +16,15 @@ async def load_page(**kwargs):
         str: body of the HTTPClient.fetch() response
 
     """
-    request = prepare_request(**kwargs)
-    response = await AsyncHTTPClient().fetch(request=request)
-    return response.body.decode(options.BASE_ENCODING)
+    async with aiohttp.ClientSession() as session:
+        if not url:
+            url = options.SCHEDULE_URL
+        response = await session.request(url=url,
+                                         method=method,
+                                         data=body)
+
+        raw_response_body = await response.content.read()
+        return raw_response_body.decode(options.BASE_ENCODING)
 
 
 async def load_schedule(**kwargs):
