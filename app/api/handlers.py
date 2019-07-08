@@ -9,12 +9,16 @@ from app.options import CORS
 
 
 def cors_headers(f):
-    @functools.wraps(f)
-    async def new_f(*args):
-        response = await f(*args)
+
+    def _add_headers(response):
         for key, value in CORS.items():
             response.headers[key] = value
         return response
+
+    @functools.wraps(f)
+    async def new_f(*args):
+        response = await f(*args)
+        return _add_headers(response)
     return new_f
 
 
