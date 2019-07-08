@@ -1,11 +1,24 @@
 from aiohttp import web
-
+import functools
+from aiohttp.abc import AbstractView
 from app.scraper.loader import load_page, load_teachers_or_groups, \
     load_schedule
 from app.scraper.parser import parse_schedule, parse_faculties
 from app.scraper.serializers import serialize_schedule, serialize_list
+from app.options import CORS
 
 
+def cors_headers(f):
+    @functools.wraps(f)
+    async def new_f(*args):
+        response = await f(*args)
+        for key, value in CORS.items():
+            response.headers[key] = value
+        return response
+    return new_f
+
+
+@cors_headers
 async def schedule_handler(request):
 
     group = request.query.get('group', '')
@@ -30,6 +43,7 @@ async def schedule_handler(request):
     return web.json_response(body=schedule_json, status=200)
 
 
+@cors_headers
 async def faculties_handler(request):
     body = await load_page()
     faculties_list = parse_faculties(body)
@@ -37,6 +51,7 @@ async def faculties_handler(request):
     return web.json_response(body=faculties_json, status=200)
 
 
+@cors_headers
 async def teachers_handler(request):
 
     query = request.query.get('query', '')
@@ -50,6 +65,7 @@ async def teachers_handler(request):
     return web.json_response(body=teachers_json, status=200)
 
 
+@cors_headers
 async def groups_handler(request):
     query = request.query.get('query', '')
 
@@ -57,3 +73,5 @@ async def groups_handler(request):
 
     groups_json = serialize_list(groups_list)
     return web.json_response(body=groups_json, status=200)
+
+

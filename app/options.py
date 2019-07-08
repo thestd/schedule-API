@@ -13,3 +13,6 @@ BASE_ENCODING = "cp1251"
 CONNECTION_TIMEOUT = 1.5
 REQUEST_TIMEOUT = 1.5
 
+CORS = {
+    'Access-Control-Allow-Origin': '*',
+}
