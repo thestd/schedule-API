@@ -5,7 +5,13 @@ import aiohttp
 from app.scraper.utils import prepare_post_data
 
 
-__all__ = ["load_page", "load_schedule", "load_teachers_or_groups", ]
+__all__ = ["load_page", "load_schedule", "load_teachers_or_groups", "close_session"]
+
+_session = aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar())
+
+
+async def close_session(_):
+    await _session.close()
 
 
 async def load_page(url=None, method='GET', body=None):
@@ -18,10 +24,9 @@ async def load_page(url=None, method='GET', body=None):
     """
     if not url:
         url = options.SCHEDULE_URL
-    async with aiohttp.ClientSession() as session:
-        response = await session.request(url=url,
-                                         method=method,
-                                         data=body)
+    async with _session.request(url=url,
+                                method=method,
+                                data=body) as response:
         raw_response_body = await response.content.read()
 
         return raw_response_body.decode(options.BASE_ENCODING)
