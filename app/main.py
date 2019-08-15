@@ -1,29 +1,20 @@
-from tornado.ioloop import IOLoop
-from tornado.options import options
-from tornado.web import Application
+from aiohttp import web
 
-from .api.urls import urls as api_urls
-from .options import load_conf
+from app import options
+from app.api.routes import routes
 
 
-def _make_app():
+def _make_app(*args, **kwargs):
     """
     Defines main application `handlers` & `settings`
 
     :return Application:
     """
-    urls = [*api_urls]
 
-    settings = {
-        'handlers': urls,
-        'debug': True
-    }
-    return Application(**settings)
+    app = web.Application(debug=options.DEBUG)
+    app.router.add_routes(routes)
+    return app
 
 
 def run():
-    load_conf()
-    app = _make_app()
-    app.listen(options.app_port)
-
-    IOLoop.instance().start()
+    web.run_app(_make_app(), port=options.APP_PORT)

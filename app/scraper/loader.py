@@ -1,26 +1,30 @@
 from json import loads, JSONDecodeError
-
 from urllib.parse import urlencode
-from tornado.options import options
-from tornado.httpclient import AsyncHTTPClient
-
-from app.scraper.utils import prepare_post_data, prepare_request
+from app import options
+import aiohttp
+from app.scraper.utils import prepare_post_data
 
 
 __all__ = ["load_page", "load_schedule", "load_teachers_or_groups", ]
 
 
-async def load_page(**kwargs):
+async def load_page(url=None, method='GET', body=None):
     """
-    Pass **kwargs to prepare_request() and send taken request with AsyncHTTPClient
+    Send request to the schedule url
 
     Returns:
-        str: body of the HTTPClient.fetch() response
+        str: decoded body of the response
 
     """
-    request = prepare_request(**kwargs)
-    response = await AsyncHTTPClient().fetch(request=request)
-    return response.body.decode(options.base_encoding)
+    if not url:
+        url = options.SCHEDULE_URL
+    async with aiohttp.ClientSession() as session:
+        response = await session.request(url=url,
+                                         method=method,
+                                         data=body)
+        raw_response_body = await response.content.read()
+
+        return raw_response_body.decode(options.BASE_ENCODING)
 
 
 async def load_schedule(**kwargs):
@@ -29,7 +33,7 @@ async def load_schedule(**kwargs):
     Pass **kwargs to prepare_post_data() to get body for POST request
 
     Returns:
-        str: body of the HTTPClient.fetch() response
+        str: decoded body of the response
 
     """
     post_data = prepare_post_data(**kwargs)
@@ -52,9 +56,9 @@ async def load_teachers_or_groups(query='', faculty='0', teachers=False):
 
     """
     if teachers:
-        api_code = options.teachers_api_code
+        api_code = options.TEACHERS_API_CODE
     else:
-        api_code = options.groups_api_code
+        api_code = options.GROUPS_API_CODE
 
     params = {
         'n': 701,
@@ -63,7 +67,7 @@ async def load_teachers_or_groups(query='', faculty='0', teachers=False):
         'query': query,
     }
 
-    url = options.ajax_url + urlencode(params)
+    url = options.AJAX_URL + urlencode(params)
     decoded_response = await load_page(url=url)
 
     # if not teachers:
