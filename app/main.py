@@ -1,7 +1,7 @@
 from aiohttp import web
 
+from app import options
 from app.api.routes import routes
-from app.options import APP_PORT
 
 
 def _make_app(*args, **kwargs):
@@ -11,10 +11,10 @@ def _make_app(*args, **kwargs):
     :return Application:
     """
 
-    app = web.Application(debug=True)
+    app = web.Application(debug=options.DEBUG)
     app.router.add_routes(routes)
     return app
 
 
 def run():
-    web.run_app(_make_app(), port=APP_PORT)
+    web.run_app(_make_app(), port=options.APP_PORT)
