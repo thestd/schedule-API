@@ -1,4 +1,4 @@
-import ujson as json
+import json
 import re
 from dataclasses import dataclass
 from os import environ as env
