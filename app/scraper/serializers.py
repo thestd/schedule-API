@@ -1,4 +1,4 @@
-import json
+import ujson as json
 
 
 __all__ = ["serialize_schedule", "serialize_list", ]

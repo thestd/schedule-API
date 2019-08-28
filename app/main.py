@@ -1,4 +1,5 @@
 from aiohttp import web
+import uvloop
 
 from app import options
 from app.api.routes import routes
@@ -17,4 +18,6 @@ def _make_app(*args, **kwargs):
 
 
 def run():
+    # Just trick to speed-up api-service
+    uvloop.install()
     web.run_app(_make_app(), port=options.APP_PORT)
