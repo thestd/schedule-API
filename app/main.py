@@ -13,12 +13,14 @@ async def _make_app(*args, **kwargs):
 
     :return Application:
     """
+
     async def close_redis(a):
         a['redis'].close()
 
     app = web.Application(debug=options.DEBUG)
     app.router.add_routes(routes)
-    app['redis'] = await aioredis.create_redis((options.REDIS_HOST, options.REDIS_PORT))
+    app['redis'] = await aioredis.create_redis((options.REDIS_HOST,
+                                                options.REDIS_PORT))
     app.on_shutdown.append(close_redis)
     app.on_shutdown.append(close_session)
     return app

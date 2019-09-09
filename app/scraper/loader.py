@@ -9,6 +9,7 @@ from app.scraper.utils import prepare_post_data
 from app.scraper.serializers import serialize_list
 from asyncio import ensure_future
 
+
 __all__ = ["load_page", "load_schedule", "close_session", "lazy_loader"]
 
 _session = ClientSession(cookie_jar=DummyCookieJar())
