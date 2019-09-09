@@ -1,11 +1,13 @@
-from json import loads, JSONDecodeError
+from ujson import loads
+from json import JSONDecodeError
 from urllib.parse import urlencode
+
 from app import options
-import aiohttp
+
+from app.misc import session
 from app.scraper.utils import prepare_post_data
 from app.scraper.serializers import serialize_list
 from asyncio import ensure_future
-
 
 __all__ = ["load_page", "load_schedule", "close_session", "lazy_loader"]
 
@@ -13,7 +15,7 @@ _session = aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar())
 
 
 async def close_session(_):
-    await _session.close()
+    await session.close()
 
 
 async def load_page(url=None, method='GET', body=None):
@@ -26,9 +28,9 @@ async def load_page(url=None, method='GET', body=None):
     """
     if not url:
         url = options.SCHEDULE_URL
-    async with _session.request(url=url,
-                                method=method,
-                                data=body) as response:
+    async with session.request(url=url,
+                               method=method,
+                               data=body) as response:
         raw_response_body = await response.content.read()
 
         return raw_response_body.decode(options.BASE_ENCODING)

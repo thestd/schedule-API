@@ -1,11 +1,10 @@
-import uvloop
-uvloop.install()
-
 from aiohttp import web
-from app import options
-from app.api.routes import routes
-from app.scraper.loader import close_session
 import aioredis
+
+from app.api.routes import routes
+from app.misc import app
+from app.options import APP_PORT
+from app.scraper.loader import close_session
 
 
 async def _make_app(*args, **kwargs):
@@ -26,4 +25,4 @@ async def _make_app(*args, **kwargs):
 
 
 def run():
-    web.run_app(_make_app(), port=options.APP_PORT)
+    web.run_app(_make_app(), port=APP_PORT)
