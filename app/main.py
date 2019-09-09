@@ -1,24 +1,29 @@
 import uvloop
+uvloop.install()
+
 from aiohttp import web
 from app import options
 from app.api.routes import routes
 from app.scraper.loader import close_session
+import aioredis
 
 
-def _make_app(*args, **kwargs):
+async def _make_app(*args, **kwargs):
     """
     Defines main application `handlers` & `settings`
 
     :return Application:
     """
+    async def close_redis(a):
+        a['redis'].close()
 
     app = web.Application(debug=options.DEBUG)
     app.router.add_routes(routes)
+    app['redis'] = await aioredis.create_redis((options.REDIS_HOST, options.REDIS_PORT))
+    app.on_shutdown.append(close_redis)
     app.on_shutdown.append(close_session)
     return app
 
 
 def run():
-    # Just trick to speed-up api-service
-    uvloop.install()
     web.run_app(_make_app(), port=options.APP_PORT)

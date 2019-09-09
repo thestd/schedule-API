@@ -1,6 +1,7 @@
 ujson
 uvloop
 aiohttp==3.5.4
+aioredis==1.2.0
 async-timeout==3.0.1
 attrs==19.1.0
 beautifulsoup4==4.7.1

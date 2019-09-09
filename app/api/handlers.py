@@ -1,7 +1,7 @@
 import functools
 from aiohttp import web
-from app.scraper.loader import load_page, load_teachers_or_groups, \
-    load_schedule
+from app.scraper.loader import load_page, \
+    load_schedule, lazy_loader
 from app.scraper.parser import parse_schedule, parse_faculties
 from app.scraper.serializers import serialize_schedule, serialize_list
 from app.options import CORS
@@ -59,12 +59,9 @@ async def faculties_handler(request):
 @cors_headers
 async def teachers_handler(request):
     query = request.query.get('query', '')
-    faculty = request.query.get('faculty', '0')
-
-    teachers_list = await load_teachers_or_groups(query=query,
-                                                  faculty=faculty,
-                                                  teachers=True)
-
+    teachers_list = await lazy_loader(redis=request.app['redis'],
+                                      query=query,
+                                      teachers=True)
     teachers_json = serialize_list(teachers_list)
     return web.json_response(body=teachers_json, status=200)
 
@@ -72,9 +69,8 @@ async def teachers_handler(request):
 @cors_headers
 async def groups_handler(request):
     query = request.query.get('query', '')
-
-    groups_list = await load_teachers_or_groups(query=query)
-
+    groups_list = await lazy_loader(redis=request.app['redis'],
+                                    query=query)
     groups_json = serialize_list(groups_list)
     return web.json_response(body=groups_json, status=200)
 

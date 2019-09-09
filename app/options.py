@@ -15,6 +15,10 @@ BASE_ENCODING = "cp1251"
 CONNECTION_TIMEOUT = 1.5
 REQUEST_TIMEOUT = 1.5
 
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+
+CACHE_PERIOD = 60*60*24
 CORS = {
     'Access-Control-Allow-Origin': '*',
 }
