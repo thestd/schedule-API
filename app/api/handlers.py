@@ -1,7 +1,5 @@
 import functools
-
 from aiohttp import web
-
 from app.scraper.loader import load_page, load_teachers_or_groups, \
     load_schedule
 from app.scraper.parser import parse_schedule, parse_faculties

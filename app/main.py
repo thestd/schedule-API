@@ -1,8 +1,8 @@
-from aiohttp import web
 import uvloop
-
+from aiohttp import web
 from app import options
 from app.api.routes import routes
+from app.scraper.loader import close_session
 
 
 def _make_app(*args, **kwargs):
@@ -14,6 +14,7 @@ def _make_app(*args, **kwargs):
 
     app = web.Application(debug=options.DEBUG)
     app.router.add_routes(routes)
+    app.on_shutdown.append(close_session)
     return app
 
 
