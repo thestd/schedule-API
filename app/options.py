@@ -2,6 +2,8 @@ APP_PORT = 8085
 
 SECRET = "ABCDEFG!@#$%#"
 
+DEBUG = False
+
 SCHEDULE_URL = "http://asu.pnu.edu.ua/cgi-bin/timetable.cgi?n=700"
 AJAX_URL = "http://asu.pnu.edu.ua/cgi-bin/timetable.cgi?"
 
