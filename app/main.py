@@ -1,8 +1,9 @@
 from aiohttp import web
-import uvloop
 
-from app import options
 from app.api.routes import routes
+from app.misc import app
+from app.options import APP_PORT
+from app.scraper.loader import close_session
 
 
 def _make_app(*args, **kwargs):
@@ -11,13 +12,10 @@ def _make_app(*args, **kwargs):
 
     :return Application:
     """
-
-    app = web.Application(debug=options.DEBUG)
     app.router.add_routes(routes)
+    app.on_shutdown.append(close_session)
     return app
 
 
 def run():
-    # Just trick to speed-up api-service
-    uvloop.install()
-    web.run_app(_make_app(), port=options.APP_PORT)
+    web.run_app(_make_app(), port=APP_PORT)

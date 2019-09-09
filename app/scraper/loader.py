@@ -1,11 +1,18 @@
-from json import loads, JSONDecodeError
+from ujson import loads
+from json import JSONDecodeError
 from urllib.parse import urlencode
+
 from app import options
-import aiohttp
+
+from app.misc import session
 from app.scraper.utils import prepare_post_data
 
+__all__ = ["load_page", "load_schedule", "load_teachers_or_groups",
+           "close_session"]
 
-__all__ = ["load_page", "load_schedule", "load_teachers_or_groups", ]
+
+async def close_session(_):
+    await session.close()
 
 
 async def load_page(url=None, method='GET', body=None):
@@ -18,10 +25,9 @@ async def load_page(url=None, method='GET', body=None):
     """
     if not url:
         url = options.SCHEDULE_URL
-    async with aiohttp.ClientSession() as session:
-        response = await session.request(url=url,
-                                         method=method,
-                                         data=body)
+    async with session.request(url=url,
+                               method=method,
+                               data=body) as response:
         raw_response_body = await response.content.read()
 
         return raw_response_body.decode(options.BASE_ENCODING)
