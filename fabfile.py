@@ -67,7 +67,6 @@ def deploy_process(c, tag):
     c.run('git fetch --all --tags --prune --prune-tags --progress')
     c.run(f'git checkout -f tags/{tag} -B release/{tag}')
     c.run(' &&'.join((
-        'docker-compose down',
         'docker-compose up -d --build',
         'docker ps --format="table {{.Names}}\t{{.Ports}}\t{{.Status}}"'
     )))

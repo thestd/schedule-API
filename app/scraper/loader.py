@@ -4,15 +4,19 @@ from urllib.parse import urlencode
 
 from app import options
 
-from app.misc import session
+from aiohttp import ClientSession, DummyCookieJar
 from app.scraper.utils import prepare_post_data
+from app.scraper.serializers import serialize_list
+from asyncio import ensure_future
 
-__all__ = ["load_page", "load_schedule", "load_teachers_or_groups",
-           "close_session"]
+
+__all__ = ["load_page", "load_schedule", "close_session", "lazy_loader"]
+
+_session = ClientSession(cookie_jar=DummyCookieJar())
 
 
 async def close_session(_):
-    await session.close()
+    await _session.close()
 
 
 async def load_page(url=None, method='GET', body=None):
@@ -25,9 +29,9 @@ async def load_page(url=None, method='GET', body=None):
     """
     if not url:
         url = options.SCHEDULE_URL
-    async with session.request(url=url,
-                               method=method,
-                               data=body) as response:
+    async with _session.request(url=url,
+                                method=method,
+                                data=body) as response:
         raw_response_body = await response.content.read()
 
         return raw_response_body.decode(options.BASE_ENCODING)
@@ -48,7 +52,20 @@ async def load_schedule(**kwargs):
     return await load_page(method='POST', body=body)
 
 
-async def load_teachers_or_groups(query='', faculty='0', teachers=False):
+async def lazy_loader(redis, query, teachers=False):
+    query = query.lower()
+    key = 'teachers' if teachers else 'groups'
+    objects_list = await redis.get(key)
+    if objects_list:
+        objects_list = loads(objects_list)
+    else:
+        objects_list = await _load_teachers_or_groups(teachers=teachers)
+        await redis.set(key, serialize_list(objects_list))
+        ensure_future(redis.expire(key, options.CACHE_PERIOD))
+    return [item for item in objects_list if query in item.lower()]
+
+
+async def _load_teachers_or_groups(query='', faculty='0', teachers=False):
     """
     Send request to schedule url to get teachers or groups list
 

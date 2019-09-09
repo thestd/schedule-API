@@ -1,13 +1,12 @@
 ujson
 uvloop
 aiohttp==3.5.4
+aioredis==1.2.0
 async-timeout==3.0.1
 attrs==19.1.0
 beautifulsoup4==4.7.1
 bs4==0.0.1
 chardet==3.0.4
-cryptography==2.7
-fabric==2.4.0
 idna==2.8
 idna-ssl==1.1.0
 lxml==4.3.4
