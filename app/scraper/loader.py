@@ -11,8 +11,6 @@ from asyncio import ensure_future
 
 __all__ = ["load_page", "load_schedule", "close_session", "lazy_loader"]
 
-_session = aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar())
-
 
 async def close_session(_):
     await session.close()
