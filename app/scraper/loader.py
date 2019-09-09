@@ -4,16 +4,18 @@ from urllib.parse import urlencode
 
 from app import options
 
-from app.misc import session
+from aiohttp import ClientSession, DummyCookieJar
 from app.scraper.utils import prepare_post_data
 from app.scraper.serializers import serialize_list
 from asyncio import ensure_future
 
 __all__ = ["load_page", "load_schedule", "close_session", "lazy_loader"]
 
+_session = ClientSession(cookie_jar=DummyCookieJar())
+
 
 async def close_session(_):
-    await session.close()
+    await _session.close()
 
 
 async def load_page(url=None, method='GET', body=None):
