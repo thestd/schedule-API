@@ -1,6 +1,7 @@
-from aiohttp import web, ClientSession, DummyCookieJar
+from aiohttp import web
 
 from app.api.routes import routes
+from app.misc import app
 from app.options import APP_PORT
 from app.scraper.loader import close_session
 
@@ -11,8 +12,6 @@ def _make_app(*args, **kwargs):
 
     :return Application:
     """
-
-    app = web.Application(debug=True)
     app.router.add_routes(routes)
     app.on_shutdown.append(close_session)
     return app
