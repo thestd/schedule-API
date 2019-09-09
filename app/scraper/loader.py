@@ -9,11 +9,7 @@ from app.scraper.utils import prepare_post_data
 from app.scraper.serializers import serialize_list
 from asyncio import ensure_future
 
-__all__ = ["load_page", "load_schedule", "close_session", "lazy_loader"]
-
-
-async def close_session(_):
-    await session.close()
+__all__ = ["load_page", "load_schedule", "lazy_loader"]
 
 
 async def load_page(url=None, method='GET', body=None):
