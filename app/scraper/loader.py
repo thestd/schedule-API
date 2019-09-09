@@ -29,9 +29,9 @@ async def load_page(url=None, method='GET', body=None):
     """
     if not url:
         url = options.SCHEDULE_URL
-    async with session.request(url=url,
-                               method=method,
-                               data=body) as response:
+    async with _session.request(url=url,
+                                method=method,
+                                data=body) as response:
         raw_response_body = await response.content.read()
 
         return raw_response_body.decode(options.BASE_ENCODING)
