@@ -22,11 +22,8 @@ async def load_page(url=None, method='GET', body=None):
     """
     if not url:
         url = options.SCHEDULE_URL
-    async with ClientSession(
-            cookie_jar=DummyCookieJar()).request(url=url,
-                                                 method=method,
-                                                 data=body
-                                                 ) as response:
+    async with ClientSession(cookie_jar=DummyCookieJar()) as session:
+        response = await session.request(url=url, method=method, data=body)
         raw_response_body = await response.content.read()
 
         return raw_response_body.decode(options.BASE_ENCODING)
