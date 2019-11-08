@@ -26,7 +26,7 @@ async def load_page(url=None, method='GET', body=None):
         response = await session.request(url=url, method=method, data=body)
         raw_response_body = await response.content.read()
 
-        return raw_response_body.decode(options.BASE_ENCODING)
+    return raw_response_body.decode(options.BASE_ENCODING)
 
 
 async def load_schedule(**kwargs):
