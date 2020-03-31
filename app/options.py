@@ -1,3 +1,5 @@
+import os
+
 APP_PORT = 8085
 
 SECRET = "ABCDEFG!@#$%#"
@@ -15,8 +17,8 @@ BASE_ENCODING = "cp1251"
 CONNECTION_TIMEOUT = 1.5
 REQUEST_TIMEOUT = 1.5
 
-REDIS_HOST = 'redis'
-REDIS_PORT = 6379
+REDIS_HOST = os.getenv("REDIS_HOST", "redis")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 
 CACHE_PERIOD = 60*60*24
 CORS = {
