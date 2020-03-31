@@ -1,6 +1,6 @@
 import os
 
-APP_PORT = 8085
+APP_PORT = int(os.getenv("PORT", 8085))
 
 SECRET = "ABCDEFG!@#$%#"
 
