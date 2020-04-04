@@ -1,0 +1,179 @@
+swagger: '2.0'
+info:
+  description: "This is a PNU Schedule API Swagger. You can test some requests here"
+  version: "1.0.0"
+  title: "PNU Schedule API"
+  contact:
+    email: "khortiukserhii@ukr.net"
+host: "pnu-api.herokuapp.com"
+basePath: "/api"
+schemes:
+  - "https"
+
+tags:
+  - name: "schedule"
+  - name: "groups"
+  - name: "teachers"
+  - name: "faculties"
+
+paths:
+  /schedule:
+    get:
+      tags:
+        - "schedule"
+      summary: "Returns schedule"
+      description: "
+      Examples:
+        
+        * /schedule?group=ІПЗ-41
+        
+        * /schedule?teacher=Козленко Микола Іванович&date_from=07.05.2019
+        
+        * /schedule?group=ІПЗ-41&date_from=08.04.2019&date_to=09.04.2019
+      "
+      produces:
+        - "application/json"
+      parameters:
+        - name: "group"
+          in: "query"
+          type: "string"
+        - name: "teacher"
+          in: "query"
+          type: "string"
+        - name: "date_from"
+          in: "query"
+          type: "string"
+          format: "dd.mm.yyyy"
+        - name: "date_to"
+          in: "query"
+          type: "string"
+          format: "dd.mm.yyyy"
+
+      responses:
+        200:
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/ScheduleResource"
+
+
+  /groups:
+    get:
+      tags:
+        - "groups"
+      summary: "Returns list of groups"
+      description: "
+      Examples:
+        
+        * /groups
+        
+        * /groups?query=ІПЗ
+      "
+      produces:
+        - "application/json"
+      parameters:
+        - name: "query"
+          in: "query"
+          type: "string"
+      responses:
+        200:
+          description: "Ok"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+
+  /teachers:
+    get:
+      tags:
+        - "teachers"
+      summary: "Returns list of teachers names"
+
+      description: "
+      Examples:
+        
+        * /teachers
+        
+        * /teachers?query=Коз
+        
+        * /teachers?faculty=1002
+        
+        * /teachers?query=Коз&faculty=1002
+      "
+      produces:
+        - "application/json"
+      parameters:
+        - name: "query"
+          in: "query"
+          type: "string"
+        - name: "faculty"
+          in: "query"
+          type: "integer"
+      responses:
+        200:
+          description: "Ok"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+
+
+  /faculties:
+    get:
+      tags:
+        - "faculties"
+      summary: "Returns list of faculties with their codes"
+      description: "
+      Examples:
+        
+        * /faculties
+      "
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Ok"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Faculty"
+
+definitions:
+  ScheduleResource:
+    type: "object"
+    properties:
+      group:
+        type: "string"
+      schedule:
+        type: "array"
+        items:
+          $ref: "#/definitions/Schedule"
+  Schedule:
+    type: "object"
+    properties:
+      date:
+        type: "string"
+        format: "date"
+      day:
+        type: "string"
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScheduleItem"
+
+  ScheduleItem:
+    type: "object"
+    properties:
+      number:
+        type: "string"
+      time_bounds:
+        type: "string"
+      info:
+        type: "string"
+
+  Faculty:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      code:
+        type: "integer"
