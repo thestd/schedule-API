@@ -1,6 +1,7 @@
 ujson
 uvloop
 aiohttp==3.5.4
+aiohttp-swagger==1.0.14
 aioredis==1.2.0
 async-timeout==3.0.1
 attrs==19.1.0
