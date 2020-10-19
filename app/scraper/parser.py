@@ -18,20 +18,16 @@ def _parse_raw_lesson(raw_lesson):
         }
     """
     info = raw_lesson.find_all('td')
-    lesson_number = info[0].contents[0]
-
+    lesson_number = info[0].get_text()
     time_bounds = "".join(str(item) for item in info[1].contents)\
         .replace('<br/>', ' - ')
-    lesson_info = "".join(str(item) for item in info[2].contents)\
-        .replace('<br/>', ' / ').replace(u'\xa0', u' ')
+    lesson_info = info[2].get_text()
 
-    parsed_lesson = {
+    return {
             'number': lesson_number,
             'time_bounds': time_bounds,
             'info': lesson_info
     }
-
-    return parsed_lesson
 
 
 def _check_lesson_is_empty(parsed_lesson):
