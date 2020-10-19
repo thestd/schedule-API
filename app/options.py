@@ -21,7 +21,7 @@ REDIS_HOST = os.getenv("REDIS_HOST", "redis")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 REDIS_URI = os.getenv("REDIS_URI")
 
-CACHE_PERIOD = 60*60*24
+CACHE_PERIOD = 1
 CORS = {
     'Access-Control-Allow-Origin': '*',
 }
